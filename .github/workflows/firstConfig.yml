@@ -50,7 +50,7 @@ jobs:
           # Artifact name
           name: artifact
           # A file, directory, or wildcard pattern that describes what to upload
-          path: build
+          path: build/
           # The desired behavior if no files are found using the provided path
           if-no-files-found: warn
           # Duration after which artifact will expire in days
@@ -68,13 +68,23 @@ jobs:
       - name: Build
         run: npm run build
       
-      # Deploy to GitHub Pages
+      # Deploy job
+  deploy:
+    # Add a dependency to the build job
+    needs: build
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-      
+        id: deployment
+        uses: actions/deploy-pages@v4
+
       # Run tests
       - name: Test
         run: npm test
