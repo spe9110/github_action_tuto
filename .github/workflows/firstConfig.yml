@@ -67,13 +67,7 @@ jobs:
       # Build the project
       - name: Build
         run: npm run build
-      
-      - name: Deploy React to GitHub Pages
-        uses: bitovi/github-actions-react-to-github-pages@v1.2.4
-          with:
-            # Specifies the path of the static assets after building
-            path: build
-
+          
       # Run tests
       - name: Test
         run: npm test
