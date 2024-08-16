@@ -73,33 +73,19 @@ jobs:
         run: npm test
         
   # deployment configuration to deploy my-project
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: build
+  pqges-deploy:
+    runs-on: ubuntu-latest
     permissions:
-      contents: write
+      pages: write
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Publish site
+        uses: actions/upload-pages-artifact@v2
         with:
-          node-version: '20.x'
-
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "YARN_CACHE_DIR=$(yarn cache dir)" >> "${GITHUB_OUTPUT}"
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache.outputs.YARN_CACHE_DIR }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          path: ./build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+        uses: actions/deploy-pages@v2
