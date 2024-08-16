@@ -73,7 +73,7 @@ jobs:
         run: npm test
         
   # deployment configuration to deploy my-project
-  pqges-deploy:
+  pages-deploy:
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -85,7 +85,7 @@ jobs:
       - name: Publish site
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./build
+          path: ./
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
